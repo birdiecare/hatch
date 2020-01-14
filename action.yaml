@@ -1,0 +1,19 @@
+name: 'Hatch'
+description: 'Generate an API client based on the Swagger docs exposed by a microservice'
+inputs: 
+  path-to-json:
+    description: 'Path to json file with swagger docs'
+    required: true
+  service-name:
+    description: 'The slug of your service name'
+    required: true
+  github-registry-token:
+    description: 'GitHub Registry token'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.path-to-json }}
+    - ${{ inputs.service-name }}
+    - ${{ inputs.github-registry-token }}

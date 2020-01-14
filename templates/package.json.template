@@ -1,0 +1,26 @@
+{
+  "name": "",
+  "version": "0.0.1",
+  "description": "",
+  "license": "UNLICENSED",
+  "types": "index.d.ts",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc --project ./tsconfig.json"
+  },
+  "repository" : {
+    "type" : "git",
+    "url": ""
+  },
+  "dependencies": {
+    "url": "^0.11.0"
+  },
+  "devDependencies": {
+    "axios": "^0.19.1",
+    "url": "^0.11.0",
+    "typescript": "^3.7.4"
+  },
+  "peerDependencies": {
+    "axios": "^0.19.1"
+  }
+}
