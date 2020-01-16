@@ -21,9 +21,9 @@ generate-api-client:
   - name: Run Hatch Action
     uses: birdiecare/hatch@v0.0.1
     with:
-      path-to-openapi-spec: <e.g. https://staging.myservice.com/docs.json>
-      service-name: <e.g. my-service>
-      github-registry-token: <your GitHub Registry Token>
+      path: <e.g. https://staging.myservice.com/docs.json>
+      name: <Name of your service, e.g. my-service> # the generated client will automatically be called my-service-client
+      token: <your GitHub Registry Token>
 ```
 
 Running this Action will publish an NPM package called `my-service-client` as a package __inside the repository of the service running the Action__.
