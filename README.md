@@ -15,8 +15,6 @@ generate-api-client:
   name: Generate API client
   needs: <any prerequisite earlier job>
   runs-on: ubuntu-latest
-  env:
-  GITHUB_REGISTRY_TOKEN: <your GitHub Registry Token>
   steps:
   - name: Run Hatch Action
     uses: birdiecare/hatch@v0.0.1
