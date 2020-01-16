@@ -1,19 +1,19 @@
 name: 'Hatch'
 description: 'Generate and publish a TypeScript-axios API client based on your OpenAPI spec'
 inputs: 
-  path-to-openapi-spec:
+  path:
     description: 'Path to JSON-formatted OpenAPI spec'
     required: true
-  service-name:
+  name:
     description: 'Your service name (client will be published as your-service-name-client)'
     required: true
-  github-registry-token:
+  token:
     description: 'Your GitHub Registry token'
     required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.path-to-openapi-spec }}
-    - ${{ inputs.service-name }}
-    - ${{ inputs.github-registry-token }}
+    - ${{ inputs.path }}
+    - ${{ inputs.name }}
+    - ${{ inputs.token }}
