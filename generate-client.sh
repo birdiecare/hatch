@@ -15,7 +15,7 @@ java -jar openapi-generator-cli.jar generate \
     --template-dir /openapi-templates \
     --output /client
 
-cd client
+cd /client
 
 # write package.json with package name, description, version, and github repo
 DATE=$(date -u +"%Y%m%d%H%M%S")
