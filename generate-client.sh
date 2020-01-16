@@ -4,13 +4,16 @@
 apt-get update
 apt-get -y install jq
 
+echo "vars"
+echo "$1" "$2"
+
 # pull openapi-generator binary
 wget --quiet https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.2.2/openapi-generator-cli-4.2.2.jar -O openapi-generator-cli.jar
 
 # run generator
 java -jar openapi-generator-cli.jar generate \
-    --input-spec $1 \
-    --generator-name typescript-axios \
+    --input-spec "$1" \
+    --generator-name "typescript-axios" \
     --additional-properties=supportsES6=true,modelPropertyNaming=original,withInterfaces=true \
     --template-dir /openapi-templates \
     --output /client
