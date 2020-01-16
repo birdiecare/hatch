@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
-# get jq (for json string building)
+
+# pull in jq (for json string building)
 apt-get update
 apt-get -y install jq
 
@@ -24,7 +25,7 @@ cat package.json.template | jq --arg pn "$2" '.name="@birdiecare/\($pn)-client"'
 npm i
 npm run build
 
-# copy package.json to dist folder and publish
+# copy package.json to dist folder and publish to GitHub package registry
 cp package.json dist/
 cd dist
 echo "@birdiecare:registry=https://npm.pkg.github.com/" >> .npmrc
