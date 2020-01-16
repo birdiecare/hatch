@@ -26,7 +26,7 @@ generate-api-client:
       github-registry-token: <your GitHub Registry Token>
 ```
 
-__Note:__ Running this Action will publish an NPM package called `my-service-client` as a package __inside the repository of the service running the Action__.
+Running this Action will publish an NPM package called `my-service-client` as a package __inside the repository of the service running the Action__.
 
 ### Templating
 [openapi-generator](https://github.com/OpenAPITools/openapi-generator) works by running a specified [code generator](https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators.md) on an OpenAPI spec. Hatch uses [typescript-axios](https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/typescript-axios.md) for this. 
