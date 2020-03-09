@@ -17,7 +17,7 @@ generate-api-client:
   runs-on: ubuntu-latest
   steps:
   - name: Run Hatch Action
-    uses: birdiecare/hatch@v0.0.1
+    uses: birdiecare/hatch@v0.0.1 # <-- use current version
     with:
       path: <e.g. https://staging.myservice.com/docs.json>
       name: <Name of your service, e.g. my-service> # the generated client will automatically be called my-service-client
