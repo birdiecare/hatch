@@ -38,7 +38,7 @@ then
   exit 1
 fi
 
-# install dependencies and build
+# install dependencies and build new package
 npm i
 npm run build
 
@@ -48,11 +48,40 @@ then
   exit 1
 fi
 
+# build npmrc for access to private package repo
+echo "$INPUT_REPO:registry=https://npm.pkg.github.com/" >> .npmrc
+echo "//npm.pkg.github.com/:_authToken=$INPUT_TOKEN" >> .npmrc
+
+# create dummy npm repo and install _current_ version of client package
+mkdir old_version
+cp .npmrc old_version/
+cd old_version
+npm init --yes
+npm i $INPUT_REPO/$INPUT_NAME-client
+cd ..
+
+# diff newly generated js with previous version
+cksum dist/*.js | awk '{print $1":"$2}' > new_checksums
+cksum old_version/node_modules/$INPUT_REPO/$INPUT_NAME-client/*.js | awk '{print $1":"$2}' > old_checksums
+diff old_checksums new_checksums
+
+# exit if no differences or error calculating differences
+if [ $? -eq 0 ]
+then
+  echo "No differences to publish, aborting build."
+  exit 0
+elif [ $? -ne 1]
+then
+  echo "Something went wrong comparing old to new package, aborting build."
+  exit 1
+fi  
+
+echo "Differences found between old and new package. Publishing new package."
+
 # copy package.json to dist folder and publish to GitHub package registry
 cp package.json dist/
+cp .npmrc dist/
 cd dist
-echo "@birdiecare:registry=https://npm.pkg.github.com/" >> .npmrc
-echo "//npm.pkg.github.com/:_authToken=$INPUT_TOKEN" >> .npmrc
 npm publish
 
 if [ $? -ne 0 ]
