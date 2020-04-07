@@ -49,7 +49,7 @@ then
 fi
 
 # build npmrc for access to private package repo
-echo "$INPUT_REGISTRY_NAMESPACE:registry=https://npm.pkg.github.com/" >> .npmrc
+echo "@$INPUT_REGISTRY_NAMESPACE:registry=https://npm.pkg.github.com/" >> .npmrc
 echo "//npm.pkg.github.com/:_authToken=$INPUT_TOKEN" >> .npmrc
 
 # create dummy npm repo and install _current_ version of client package
@@ -57,12 +57,12 @@ mkdir old_version
 cp .npmrc old_version/
 cd old_version
 npm init --yes
-npm i $INPUT_REGISTRY_NAMESPACE/$INPUT_NAME-client
+npm i @$INPUT_REGISTRY_NAMESPACE/$INPUT_NAME-client
 cd ..
 
 # diff newly generated js with previous version
 cksum dist/*.js | awk '{print $1":"$2}' > new_checksums
-cksum old_version/node_modules/$INPUT_REGISTRY_NAMESPACE/$INPUT_NAME-client/*.js | awk '{print $1":"$2}' > old_checksums
+cksum old_version/node_modules/@$INPUT_REGISTRY_NAMESPACE/$INPUT_NAME-client/*.js | awk '{print $1":"$2}' > old_checksums
 diff old_checksums new_checksums
 
 # exit if no differences or error calculating differences
