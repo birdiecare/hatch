@@ -11,7 +11,7 @@ inputs:
     description: 'Your GitHub Registry token'
     required: true
   registry_namespace:
-    description: 'Name of your GitHub NPM registry namespace (e.g. @mynamespace)'
+    description: 'Name of your GitHub NPM registry namespace (without the "@" where applicable)'
     required: true
 runs:
   using: 'docker'
