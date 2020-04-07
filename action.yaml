@@ -10,8 +10,8 @@ inputs:
   token:
     description: 'Your GitHub Registry token'
     required: true
-  repo:
-    description: 'Name of your GitHub repo NPM namespace (e.g. @myrepo)'
+  registry_namespace:
+    description: 'Name of your GitHub NPM registry namespace (e.g. @mynamespace)'
     required: true
 runs:
   using: 'docker'
@@ -20,4 +20,4 @@ runs:
     - INPUT_PATH
     - INPUT_NAME
     - INPUT_TOKEN
-    - INPUT_REPO
+    - INPUT_REGISTRY_NAMESPACE
