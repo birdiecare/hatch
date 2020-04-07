@@ -70,7 +70,7 @@ if [ $? -eq 0 ]
 then
   echo "No differences to publish, aborting build."
   exit 0
-elif [ $? -ne 1]
+elif [ $? -ne 1 ]
 then
   echo "Something went wrong comparing old to new package, aborting build."
   exit 1
