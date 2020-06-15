@@ -8,7 +8,7 @@ echo "Hatch action started."
 
 echo "Downloading and installing prerequisites..."
 apt-get update
-apt-get -y install jq
+apt-get -y install wget jq
 wget --quiet https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.0/openapi-generator-cli-4.3.0.jar -O openapi-generator-cli.jar
 if [ $? -ne 0 ]
 then
@@ -83,7 +83,7 @@ elif [ $? -ne 1 ]
 then
   echo "ERROR: something went wrong comparing old to new package, aborting build."
   exit 1
-fi  
+fi
 
 echo "Differences found between old and new package. Publishing new package..."
 # copy package.json to dist folder and publish to GitHub package registry
