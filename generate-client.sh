@@ -61,31 +61,31 @@ cp .npmrc old_version/
 cd old_version
 npm init --yes
 npm i @$INPUT_REGISTRY_NAMESPACE/$INPUT_NAME-client
-if [ $? -ne 0 ]
-then
-  echo "ERROR: failed to fetch latest published version; aborting"
-  exit 1
-fi
-echo "[SUCCESS]"
-
-echo "Calculating differences between latest published version and newly built package..."
-cd ..
-cksum dist/*.js | awk '{print $1":"$2}' >> new_checksums
-cksum dist/*.d.ts | awk '{print $1":"$2}' >> new_checksums
-cksum old_version/node_modules/@$INPUT_REGISTRY_NAMESPACE/$INPUT_NAME-client/*.js | awk '{print $1":"$2}' >> old_checksums
-cksum old_version/node_modules/@$INPUT_REGISTRY_NAMESPACE/$INPUT_NAME-client/*.d.ts | awk '{print $1":"$2}' >> old_checksums
-diff old_checksums new_checksums
 if [ $? -eq 0 ]
 then
-  echo "> No differences to publish, aborting Hatch action <"
-  exit 0
-elif [ $? -ne 1 ]
-then
-  echo "ERROR: something went wrong comparing old to new package, aborting build."
-  exit 1
+  echo "[SUCCESS]"
+  echo "Calculating differences between latest published version and newly built package..."
+  cd ..
+  cksum dist/*.js | awk '{print $1":"$2}' >> new_checksums
+  cksum dist/*.d.ts | awk '{print $1":"$2}' >> new_checksums
+  cksum old_version/node_modules/@$INPUT_REGISTRY_NAMESPACE/$INPUT_NAME-client/*.js | awk '{print $1":"$2}' >> old_checksums
+  cksum old_version/node_modules/@$INPUT_REGISTRY_NAMESPACE/$INPUT_NAME-client/*.d.ts | awk '{print $1":"$2}' >> old_checksums
+  diff old_checksums new_checksums
+  if [ $? -eq 0 ]
+  then
+    echo "> No differences to publish, aborting Hatch action <"
+    exit 0
+  elif [ $? -ne 1 ]
+  then
+    echo "ERROR: something went wrong comparing old to new package, aborting build."
+    exit 1
+  fi
+  echo "Differences found between old and new package"
+else
+  echo "ERROR: failed to fetch latest published version; skipping calculating differences"
 fi
 
-echo "Differences found between old and new package. Publishing new package..."
+echo "Publishing new package..."
 # copy package.json to dist folder and publish to GitHub package registry
 cp package.json dist/
 cp .npmrc dist/
