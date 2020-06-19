@@ -1,3 +1,4 @@
+* v0.0.7 - Fix missing cd in v0.0.6
 * v0.0.6 - Support installing hatch also in fresh repositories
 * v0.0.5 - Explicitly install wget before attempting to download openapi generator jar
 * v0.0.4 - Diff new package with old package and only publish if there are changes

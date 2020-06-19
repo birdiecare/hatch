@@ -83,6 +83,7 @@ then
   echo "Differences found between old and new package"
 else
   echo "ERROR: failed to fetch latest published version; skipping calculating differences"
+  cd ..
 fi
 
 echo "Publishing new package..."
