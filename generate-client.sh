@@ -86,8 +86,10 @@ then
   cd ..
   cksum dist/*.js | awk '{print $1":"$2}' >> new_checksums
   cksum dist/*.d.ts | awk '{print $1":"$2}' >> new_checksums
+  cksum dist/models/** | awk '{print $1":"$2}' >> new_checksums 
   cksum old_version/node_modules/@$INPUT_REGISTRY_NAMESPACE/$INPUT_NAME-client/*.js | awk '{print $1":"$2}' >> old_checksums
   cksum old_version/node_modules/@$INPUT_REGISTRY_NAMESPACE/$INPUT_NAME-client/*.d.ts | awk '{print $1":"$2}' >> old_checksums
+  cksum old_version/node_modules/@$INPUT_REGISTRY_NAMESPACE/$INPUT_NAME-client/models/** | awk '{print $1":"$2}' >> old_checksums
   diff old_checksums new_checksums
   if [ $? -eq 0 ]
   then
