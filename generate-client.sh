@@ -31,10 +31,7 @@ fi
 echo "[SUCCESS]"
 
 echo "Checking GitHub repository folder..."
-cd $GITHUB_WORKSPACE 
-# for debug purposes only
-ls
-cd ./src
+cd $GITHUB_WORKSPACE/src
 
 echo "Searching for models files..."
 globs=$(find . -iname '*.public-models.ts')
