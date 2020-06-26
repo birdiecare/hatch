@@ -35,7 +35,7 @@ git clone --depth 1 --single-branch --branch staging $INPUT_REPO_URL /repo
 
 echo "Searching for models files..."
 cd /repo/src
-globs=$(find . -iname '*.models.ts')
+globs=$(find . -iname '*.public-models.ts')
 cd /client
 
 if [ -z "$globs" ]; then
