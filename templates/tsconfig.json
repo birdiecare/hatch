@@ -9,6 +9,6 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "include": ["./"],
+  "include": ["./", "./models"],
   "exclude": ["node_modules", "dist"]
 }

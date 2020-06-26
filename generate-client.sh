@@ -47,6 +47,9 @@ else
   done
 fi
 
+echo "[DEBUG] models:"
+ls /client/models
+
 echo "Creating package.json from template..."
 cd /client
 
@@ -68,6 +71,9 @@ then
   exit 1
 fi
 echo "[SUCCESS]"
+
+echo "[DEBUG] dist:"
+ls /client/dist
 
 echo "Fetching latest published version of client package..."
 # build npmrc for access to private package repo - also required to publish in next step
