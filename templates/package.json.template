@@ -21,6 +21,7 @@
     "typescript": "^3.7.4"
   },
   "peerDependencies": {
+    "@nestjs/swagger": "^4.4.0",
     "axios": "^0.19.1"
   }
 }
