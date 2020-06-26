@@ -5,7 +5,9 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "declaration": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": ["./"],
   "exclude": ["node_modules", "dist"]
