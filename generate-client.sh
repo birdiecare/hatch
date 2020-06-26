@@ -30,6 +30,12 @@ then
 fi
 echo "[SUCCESS]"
 
+echo "Checking GitHub repository folder..."
+cd $GITHUB_WORKSPACE 
+# for debug purposes only
+ls
+cd ./src
+
 echo "Searching for models files..."
 globs=$(find . -iname '*.public-models.ts')
 
@@ -40,7 +46,7 @@ else
   mkdir -p /client/models
   for path in $globs; do
     echo - $(basename $path)
-    cp $path /client/models
+    cp $GITHUB_WORKSPACE/src/$path /client/models
   done
 fi
 
