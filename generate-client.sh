@@ -31,7 +31,7 @@ fi
 echo "[SUCCESS]"
 
 echo "Cloning source code repository from GitHub..."
-git clone --depth 1 --single-branch --branch staging $REPO_URL /repo
+git clone --depth 1 --single-branch --branch staging $INPUT_REPO_URL /repo
 
 echo "Searching for models files..."
 cd /repo/src
