@@ -13,9 +13,6 @@ inputs:
   registry_namespace:
     description: 'Name of your GitHub NPM registry namespace (without the "@" where applicable)'
     required: true
-  repo_url:
-    description: 'Your GitHub repository clone url'
-    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -24,4 +21,3 @@ runs:
     - INPUT_NAME
     - INPUT_TOKEN
     - INPUT_REGISTRY_NAMESPACE
-    - INPUT_REPO_URL
