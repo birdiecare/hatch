@@ -30,7 +30,7 @@ generate-api-client:
 
 Running this Action will publish an NPM package called `my-service-client` as a package **inside the repository of the service running the Action**.
 
-### Exposing swagger models
+### Exposing Swagger models
 
 If you want to create a proxy endpoint in `core-api`, you would like to import the class decorated with `@nestjs/swagger` decorators to avoid re-declaring the swagger docs.
 
@@ -41,7 +41,7 @@ Then in the `core-api` you can import the file from `package/models/filename` ne
 import { IdentifierMapping } from '@birdiecare/rostering-integrations-client/models/identifier-mapping.public-models';
 ```
 
-Be aware that the public models files shouldn't have any other imports than `@nestjs/swagger` and `class-validator` ones! Otherwise (especially in case of relative imports) it gonna fail to compile.
+⚠️  Beware that the public models files shouldn't have any other imports than `@nestjs/swagger` and `class-validator` ones! Otherwise (especially in case of relative imports) it gonna fail to compile.
 
 ### Templating
 
