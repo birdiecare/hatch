@@ -1,23 +1,23 @@
 name: 'Hatch'
 description: 'Generate and publish a TypeScript-axios API client based on your OpenAPI spec'
 inputs: 
-  path:
-    description: 'Path to JSON-formatted OpenAPI spec'
+  service_name:
+    description: 'The name of the service for which you wish to generate a client'
     required: true
-  name:
-    description: 'Your service name (client will be published as your-service-name-client)'
-    required: true
-  token:
-    description: 'Your GitHub Registry token'
+  openapi_spec_url:
+    description: 'URL pointing at the JSON-formatted OpenAPI v3 spec for your service'
     required: true
   registry_namespace:
-    description: 'Name of your GitHub NPM registry namespace (without the "@" where applicable)'
+    description: 'Name of your GitHub NPM registry namespace (without the "@")'
+    required: true
+  registry_token:
+    description: 'Your GitHub Registry token'
     required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - INPUT_PATH
-    - INPUT_NAME
-    - INPUT_TOKEN
+    - INPUT_SERVICE_NAME
+    - INPUT_OPENAPI_SPEC_URL
     - INPUT_REGISTRY_NAMESPACE
+    - INPUT_REGISTRY_TOKEN
