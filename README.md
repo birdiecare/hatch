@@ -7,8 +7,7 @@ Hatch is a GitHub Action that uses [openapi-generator](https://github.com/OpenAP
 In order to be able to use this Action in the CI/CD pipeline of your service, there are two prerequisites:
 
 1. Your repository must have an associated NPM package registry, and you need a read/write registry token that you can pass into the Action.
-2. The Action must be able to access, online, the OpenAPI v3 spec for your service. 
-   At Birdie, we use an earlier step of our CI/CD pipeline to deploy the relevant service, which expose an endpoint to fetch the latest version of our OpenAPI spec. That means that when Hatch runs, it can access the latest version. 
+2. The Action must be able to access, online, the OpenAPI v3 spec for your service. (At Birdie, we use an earlier step of our CI/CD pipeline to deploy the relevant service, which exposes an endpoint to fetch the latest version of our OpenAPI spec. That means that when the Hatch action runs, it can access the latest version.)
 
 ## How to use
 
