@@ -9,34 +9,39 @@ In order to be able to use this Action in the CI/CD pipeline of your service, th
 1. Your repository must have an associated NPM package registry, and you need a read/write registry token that you can pass into the Action.
 2. The Action must be able to access, online, the OpenAPI v3 spec for your service. (At Birdie, we use an earlier step of our CI/CD pipeline to deploy the relevant service, which exposes an endpoint to fetch the latest version of our OpenAPI spec. That means that when the Hatch action runs, it can access the latest version.)
 
+
+Note: The Hatch action currently only works with GitHub Packages, and [GitHub Packages only supports scoped packages](https://docs.github.com/en/free-pro-team@latest/packages/using-github-packages-with-your-projects-ecosystem/configuring-npm-for-use-with-github-packages#publishing-a-package).
+
 ## How to use
 
 
 Once you have the prerequisites in place, you can include this Action in your GitHub workflow. The Action requires 4 parameters to be passed in:
 
-| Name                     | Description                                                                                      |
-| -----------              | -----------                                                                                      |
-| service_name             | The name of the service for which you wish to generate a client                                  |
-| openapi_spec_url         | The URL pointing at the service's OpenAPI v3 spec in JSON format                                 |
-| registry_namespace       | The name of the GitHub package registry namespace (without the @) of which your service is part. |
-| registry_token           | A read/write access token for the package registry, used to publish the generated client.        |
+| Name               | Description                                                                                |
+| ------------------ | ------------------------------------------------------------------------------------------ |
+| openapi_spec_url   | The URL pointing at the service's OpenAPI v3 spec in JSON format                           |
+| package_name       | The name to use for the generated client package                                           |
+| registry_namespace | The name of the GitHub NPM registry namespace under which to publish the generated package |
+| registry_token     | A read/write access token for the package registry, used to publish the generated client   |
+| repository_url     | The url of the GitHub repository in which the generated package should be published        |
 
 See below for an example configuration:
 
 ```yaml
 generate-api-client:
-  name: Generate API client
+  name: Generate API client using Hatch
   needs: <any prerequisite earlier job>
   runs-on: ubuntu-latest
   steps:
     - uses: actions/checkout@v2
     - name: Run Hatch action
-      uses: birdiecare/hatch@v0.0.12 
+      uses: birdiecare/hatch@v0.1.0 
       with:
-        service_name: my-service # the generated client will be named "my-service-client"
         openapi_spec_url: https://my-service.io/docs.json
-        registry_namespace: mycompany # the package will be published as @mycompany/my-service-client
+        package_name: my-api-client
+        registry_namespace: @mycompany # the package will be published under @mycompany/my-api-client
         registry_token: ${{ secrets.MY_REGISTRY_TOKEN }}
+        repository_url: ssh://git@github.com/my-organisation/my-service.git # the package will be published as part of this repo
 ```
 
 ### Exposing DTO classes using Hatch
