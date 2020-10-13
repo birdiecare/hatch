@@ -15,7 +15,7 @@ Note: The Hatch action currently only works with GitHub Packages, and [GitHub Pa
 ## How to use
 
 
-Once you have the prerequisites in place, you can include this Action in your GitHub workflow. The Action requires 4 parameters to be passed in:
+Once you have the prerequisites in place, you can include this Action in your GitHub workflow. The Action requires the following 5 parameters to be passed in:
 
 | Name               | Description                                                                                |
 | ------------------ | ------------------------------------------------------------------------------------------ |
@@ -56,7 +56,7 @@ Once included, these DTOs can be imported from the generated client:
 ```ts
 import { MyDTO } from '@mycompany/my-service-client/models/my-models.public-models';
 ```
-⚠️  Note that public model files currently do not support any other imports than `@nestjs/swagger` and `class-validator`. If you import anything else, they will fail to compile.
+⚠️  Note that public model files currently do not support any other imports than `@nestjs/swagger` and `class-validator`. If you import anything else, they will fail to compile. These two dependencies are peer-dependencies of the generated client package and should be installed in your consuming project if you use the public models feature.
 
 ## How does Hatch work "under the hood"?
 

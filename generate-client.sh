@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-# This shell script runs through the following steps to generate and publish a client bbased on the provided OpenAPI v3 specification:
+# This shell script runs through the following steps to generate and publish a client based on the provided OpenAPI v3 specification:
 # 1. Download and install prerequisites.
 # 2. Use openapi-generator to generate an API client based on the provided OpenAPI v3 spec
 # 3. Crawl for any public models (named <xxx>.public-models.ts) to include in the package.
