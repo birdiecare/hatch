@@ -1,50 +1,84 @@
-## Hatch
+# Hatch
 
-### Description
+Hatch is a GitHub Action that uses [openapi-generator](https://github.com/OpenAPITools/openapi-generator) to automatically generate and publish a TypeScript-Axios API client for your service, based on your service's OpenAPI v3 spec.
 
-Hatch is a GitHub Action that uses [openapi-generator](https://github.com/OpenAPITools/openapi-generator) to automatically generate and publish a TypeScript-axios API client for your service, based on your service's OpenAPI spec.
+## Prerequisites
 
-### Usage
+In order to be able to use this Action in the CI/CD pipeline of your service, there are two prerequisites:
 
-To use this Action, you will need:
+1. Your repository must have an associated NPM package registry, and you need a read/write registry token that you can pass into the Action.
+2. The Action must be able to access, online, the OpenAPI v3 spec for your service. (At Birdie, we use an earlier step of our CI/CD pipeline to deploy the relevant service, which exposes an endpoint to fetch the latest version of our OpenAPI spec. That means that when the Hatch action runs, it can access the latest version.)
 
-- An OpenAPI v3 spec of your service, which is accessible to the Action. Easiest might be to expose an endpoint that serves your service's OpenAPI spec
-- A GitHub NPM registry and an access token to publish packages to it
 
-You can include this Action in your GitHub workflow as follows:
+Note: The Hatch action currently only works with GitHub Packages, and [GitHub Packages only supports scoped packages](https://docs.github.com/en/free-pro-team@latest/packages/using-github-packages-with-your-projects-ecosystem/configuring-npm-for-use-with-github-packages#publishing-a-package).
+
+## How to use
+
+
+Once you have the prerequisites in place, you can include this Action in your GitHub workflow. The Action requires the following 5 parameters to be passed in:
+
+| Name               | Description                                                                                |
+| ------------------ | ------------------------------------------------------------------------------------------ |
+| openapi_spec_url   | The URL pointing at the service's OpenAPI v3 spec in JSON format                           |
+| package_name       | The name to use for the generated client package                                           |
+| registry_namespace | The name of the GitHub NPM registry namespace under which to publish the generated package |
+| registry_token     | A read/write access token for the package registry, used to publish the generated client   |
+| repository_url     | The url of the GitHub repository in which the generated package should be published        |
+
+See below for an example configuration:
 
 ```yaml
 generate-api-client:
-  name: Generate API client
+  name: Generate API client using Hatch
   needs: <any prerequisite earlier job>
   runs-on: ubuntu-latest
   steps:
-    - uses: actions/checkout@v2 # <-- this one is needed for hatch to access source code
+    - uses: actions/checkout@v2
     - name: Run Hatch action
-      uses: birdiecare/hatch@v0.0.12 # <-- use current version
+      uses: birdiecare/hatch@v0.1.0 
       with:
-        path: <e.g. https://staging.myservice.com/docs.json>
-        name: <Name of your service, e.g. my-service> # the generated client will automatically be called my-service-client
-        token: <your GitHub Registry Token>
+        openapi_spec_url: https://my-service.io/docs.json
+        package_name: my-api-client
+        registry_namespace: @mycompany # the package will be published under @mycompany/my-api-client
+        registry_token: ${{ secrets.MY_REGISTRY_TOKEN }}
+        repository_url: ssh://git@github.com/my-organisation/my-service.git # the package will be published as part of this repo
 ```
 
-Running this Action will publish an NPM package called `my-service-client` as a package **inside the repository of the service running the Action**.
+### Exposing DTO classes using Hatch
 
-### Exposing Swagger models
+At [Birdie](https://birdie.care), we use [NestJS and Swagger](https://docs.nestjs.com/openapi/introduction) to annotate the DTO classes we use for our endpoints and RPC operations. For some of our use cases, it was helpful to have these full, Swagger-annotated DTO classes available as part of the generated client package, so that other services making use of this client have access to these annotations instead of just the interfaces provided by `openapi-generator`.
 
-If you want to create a proxy endpoint in `core-api`, you would like to import the class decorated with `@nestjs/swagger` decorators to avoid re-declaring the swagger docs.
+To support this use case, the Hatch action can scan the `src` folder of your service's git repo for files matching the `*.public-models.ts` glob. If you wish to include Swagger-annotated (or other) DTO classes in the generated client package, then make sure to name them accordingly.
 
-In that case, the `birdiecare/hatch` action can scan your `src` folder of the git repo in search of all the files matching the `*.public-models.ts` glob. Other files will be ignored, so make sure you put the swagger classes in that file.
+Once included, these DTOs can be imported from the generated client:
 
-Then in the `core-api` you can import the file from `package/models/filename` nested import, e.g.:
+
 ```ts
-import { IdentifierMapping } from '@birdiecare/rostering-integrations-client/models/identifier-mapping.public-models';
+import { MyDTO } from '@mycompany/my-service-client/models/my-models.public-models';
 ```
+⚠️  Note that public model files currently do not support any other imports than `@nestjs/swagger` and `class-validator`. If you import anything else, they will fail to compile. These two dependencies are peer-dependencies of the generated client package and should be installed in your consuming project if you use the public models feature.
 
-⚠️  Beware that the public models files shouldn't have any other imports than `@nestjs/swagger` and `class-validator` ones! Otherwise (especially in case of relative imports) it gonna fail to compile.
+## How does Hatch work "under the hood"?
 
-### Templating
+### openapi-generator
+Hatch uses openapi-generator to generate a client from your OpenAPI v3 spec. openapi-generator has many "generators" to allow users to generate different types of clients; the one used by Hatch is the [typescript-axios generator](https://openapi-generator.tech/docs/generators/typescript-axios). Hatch currently does not allow changing the type of generator used; if you wish to use Hatch for a different target you will have to fork this repo and amend it (or open a PR to allow configuring the generator used 🤩).
 
-[openapi-generator](https://github.com/OpenAPITools/openapi-generator) works by running a specified [code generator](https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators.md) on an OpenAPI spec. Hatch uses [typescript-axios](https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/typescript-axios.md) for this.
+The version of openapi-generator used is fixed in the `generate-client.sh` script (currently using v4.3.0.).
 
-The code generator generates an API client based on the OpenAPI spec using [Mustache](https://mustache.github.io) templates. These templates are shipped with the relevant code generator. The `/templates/openapi-generator/typescript-axios` folder of this repo houses the templates used by this Action. They are unchanged from the standard templates used by `typescript-axios`, but are included so that it is easy to make changes if your use case requires them.
+### Building and publishing the package
+Once a client is generated using openapi-generator, Hatch compares the created client (and any included public models) against the latest published version of the client from your package registry. If the client has changed (because your spec has changed), or if there is no previous version, it will continue to publish the newly generated client to your GitHub package registry.
+
+Hatch first compiles the Typescript code so that the package can be published, using [this](templates/tsconfig.json) tsconfig, before creating an NPM package. The generated package will contain a `package.json` with basic information and the required dependencies. The template used for this can be found [here](templates/package.json.template). 
+
+The version of each published package is automatically generated based on the date of publication, following the format: `0.0.YYYYMMDDHHMMSS`. 
+
+## Troubleshooting
+
+While using Hatch at Birdie, it has been stable and failures have been relatively rare. Where we have seen failures, they have generally been caused by one of the following reasons:
+
+- The OpenAPI spec not being available at the specified URL
+- The OpenAPI spec not using v3 of the spec
+- Invalid Swagger annotations used in our application code, leading to an invalid OpenAPI spec which crashes openapi-generator
+- A bug in the version of openapi-generator used, which was resolved after using a newer version
+
+If the Action fails, make sure to look at its logs, which will tell you at which step it has failed. If none of the above issues appear to be the case, then please feel free to open an issue.
