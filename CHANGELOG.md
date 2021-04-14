@@ -1,3 +1,4 @@
+- v0.1.1 - Version bumps for TypeScript dependencies and openapi-generator
 - v0.1.0 - Allow specification of registry namespace and repository URL
 - v0.0.12 - Expose swagger models in client package by copying `*.public-models.ts` files
 - v0.0.7 - Fix missing cd in v0.0.6
