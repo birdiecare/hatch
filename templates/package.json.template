@@ -19,7 +19,6 @@
     "@nestjs/swagger": "^4.8.0",
     "class-validator": "^0.13.1",
     "axios": "^0.21.1",
-    "url": "^0.13.1",
     "typescript": "^4.2.4"
   },
   "peerDependencies": {
