@@ -14,7 +14,7 @@ echo "Hatch action started."
 echo "Downloading and installing prerequisites..."
 apt-get update
 apt-get -y install wget jq
-wget --quiet https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/5.1.0/openapi-generator-cli-5.1.0.jar -O openapi-generator-cli.jar
+wget --quiet https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/7.1.0/openapi-generator-cli-7.1.0.jar -O openapi-generator-cli.jar
 if [ $? -ne 0 ]
 then
   echo "ERROR: cannot download openapi generator binary; aborting."
