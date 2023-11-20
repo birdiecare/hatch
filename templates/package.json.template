@@ -13,17 +13,17 @@
     "url": ""
   },
   "dependencies": {
-    "url": "^0.11.0"
+    "url": "^0.11.3"
   },
   "devDependencies": {
-    "@nestjs/swagger": "^4.8.0",
-    "class-validator": "^0.13.1",
-    "axios": "^0.21.1",
-    "typescript": "^4.2.4"
+    "@nestjs/swagger": "^7.1.16",
+    "class-validator": "^0.14.0",
+    "axios": "^1.6.2",
+    "typescript": "^5.2.2"
   },
   "peerDependencies": {
-    "@nestjs/swagger": "^4.4.0",
-    "class-validator": "^0.13.1",
-    "axios": "^0.21.1"
+    "@nestjs/swagger": "^7.1.16",
+    "class-validator": "^0.14.0",
+    "axios": "^1.6.2"
   }
 }
