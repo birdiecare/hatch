@@ -28,7 +28,7 @@ java -jar openapi-generator-cli.jar generate \
     --input-spec $INPUT_OPENAPI_SPEC_URL \
     --generator-name typescript-axios \
     --additional-properties=supportsES6=true,modelPropertyNaming=original,withInterfaces=true \
-    $(if [[ "${INPUT_SKIP_VALIDATE_SPEC:-false}" == "true" ]]; then echo "--skip-validate-spec"; fi) \
+    $(if [ "${INPUT_SKIP_VALIDATION:-false}" = "true" ]; then echo "--skip-validate-spec"; fi) \
     --output /client
 if [ $? -ne 0 ]
 then
