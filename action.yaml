@@ -1,6 +1,6 @@
 name: 'Hatch'
 description: 'Generate and publish a TypeScript-axios API client based on your OpenAPI spec'
-inputs: 
+inputs:
   openapi_spec_url:
     description: 'URL pointing at the JSON-formatted OpenAPI v3 spec for your service'
     required: true
@@ -13,9 +13,13 @@ inputs:
   registry_token:
     description: 'Your GitHub NPM registry token'
     required: true
-  repository_url: 
+  repository_url:
     description: 'The url of the GitHub repository in which the generated package should be published'
     required: true
+  skip_validate_spec:
+    description: 'Skip validation of the OpenAPI spec'
+    required: false
+    default: false
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -25,3 +29,4 @@ runs:
     - INPUT_REGISTRY_NAMESPACE
     - INPUT_REGISTRY_TOKEN
     - INPUT_REPOSITORY_URL
+    - INPUT_SKIP_VALIDATE_SPEC

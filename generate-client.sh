@@ -14,7 +14,7 @@ echo "Hatch action started."
 echo "Downloading and installing prerequisites..."
 apt-get update
 apt-get -y install wget jq
-wget --quiet https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/7.1.0/openapi-generator-cli-7.1.0.jar -O openapi-generator-cli.jar
+wget --quiet https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/7.4.0/openapi-generator-cli-7.4.0.jar -O openapi-generator-cli.jar
 if [ $? -ne 0 ]
 then
   echo "ERROR: cannot download openapi generator binary; aborting."
@@ -28,6 +28,7 @@ java -jar openapi-generator-cli.jar generate \
     --input-spec $INPUT_OPENAPI_SPEC_URL \
     --generator-name typescript-axios \
     --additional-properties=supportsES6=true,modelPropertyNaming=original,withInterfaces=true \
+    $(if [[ "${INPUT_SKIP_VALIDATE_SPEC:-false}" == "true" ]]; then echo "--skip-validate-spec"; fi) \
     --output /client
 if [ $? -ne 0 ]
 then
@@ -103,7 +104,7 @@ then
   cd ..
   cksum dist/*.js | awk '{print $1":"$2}' >> new_checksums
   cksum dist/*.d.ts | awk '{print $1":"$2}' >> new_checksums
-  cksum dist/models/** | awk '{print $1":"$2}' >> new_checksums 
+  cksum dist/models/** | awk '{print $1":"$2}' >> new_checksums
   cksum old_version/node_modules/$INPUT_REGISTRY_NAMESPACE/$INPUT_PACKAGE_NAME/*.js | awk '{print $1":"$2}' >> old_checksums
   cksum old_version/node_modules/$INPUT_REGISTRY_NAMESPACE/$INPUT_PACKAGE_NAME/*.d.ts | awk '{print $1":"$2}' >> old_checksums
   cksum old_version/node_modules/$INPUT_REGISTRY_NAMESPACE/$INPUT_PACKAGE_NAME/models/** | awk '{print $1":"$2}' >> old_checksums

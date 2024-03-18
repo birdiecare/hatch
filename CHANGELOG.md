@@ -1,3 +1,4 @@
+- v1.0.1 - Use openapi-generator-cli@7.4.0 and allows to skip schema validation
 - v1.0.0 - Use openapi-generator-cli@7.1.0 and axios@1.6.2 to fix CVEs
 - v0.1.2 - Fix duplicate `url` dev dependency
 - v0.1.1 - Version bumps for TypeScript dependencies and openapi-generator
