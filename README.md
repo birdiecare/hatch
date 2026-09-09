@@ -72,6 +72,24 @@ Hatch first compiles the Typescript code so that the package can be published, u
 
 The version of each published package is automatically generated based on the date of publication, following the format: `0.0.YYYYMMDDHHMMSS`. 
 
+#### Dependency pinning
+
+The build dependencies are pinned by [`templates/package-lock.json`](templates/package-lock.json), and installed with `npm ci`. This keeps a client build a function of your OpenAPI spec alone, rather than of the spec *and* whatever versions npm happened to resolve that day.
+
+This matters more than it might appear, because the client is compiled with `"declaration": true`. The emitted `.d.ts` is therefore shaped partly by the type definitions of the build dependencies, so an unpinned dependency can change the published API surface — or break the build outright — with no change to your spec and no change to Hatch. That is not hypothetical: axios `1.19.0` introduced a non-exported `unique symbol` in the return type of `request()`, which made the inferred type of the generated `createRequestFunction` impossible to name during declaration emit, failing every client build with `TS2527`.
+
+**If you change [`templates/package.json.template`](templates/package.json.template), regenerate the lockfile in the same commit**, or `npm ci` will fail on the mismatch:
+
+```sh
+cd "$(mktemp -d)" && cp <path-to-hatch>/templates/package.json.template package.json
+# give the placeholder manifest a name/version so npm will read it
+npm pkg set name=hatch-client-template version=0.0.1
+npm install --package-lock-only
+cp package-lock.json <path-to-hatch>/templates/package-lock.json
+```
+
+The root `name` and `version` in the lockfile are placeholders and are deliberately ignored: `generate-client.sh` rewrites them per-service at runtime, and `npm ci` validates only the dependency tree, not the root package identity.
+
 ## Troubleshooting
 
 While using Hatch at Birdie, it has been stable and failures have been relatively rare. Where we have seen failures, they have generally been caused by one of the following reasons:

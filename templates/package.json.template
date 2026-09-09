@@ -18,7 +18,7 @@
   "devDependencies": {
     "@nestjs/swagger": "^7.1.16",
     "class-validator": "^0.14.0",
-    "axios": "^1.6.2",
+    "axios": "~1.18.1",
     "typescript": "^5.2.2"
   },
   "peerDependencies": {

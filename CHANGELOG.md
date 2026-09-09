@@ -1,3 +1,4 @@
+- v1.0.3 - Make client builds reproducible: pin build deps via `templates/package-lock.json` + `npm ci`, and pin `axios` to `~1.18.1` (axios 1.19.0 broke declaration emit with TS2527)
 - v1.0.2 - fix shell conditional
 - v1.0.1 - Use openapi-generator-cli@7.4.0 and allows to skip schema validation
 - v1.0.0 - Use openapi-generator-cli@7.1.0 and axios@1.6.2 to fix CVEs

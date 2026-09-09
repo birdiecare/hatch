@@ -79,7 +79,17 @@ fi
 echo "[SUCCESS]"
 
 echo "Installing dependencies and building new client package..."
-npm i
+# npm ci, not npm i: install exactly the tree in templates/package-lock.json.
+# The generated package.json only rewrites name/version/description/repository,
+# so it stays in sync with the lockfile's dependency set. Regenerate the lockfile
+# (see README) whenever templates/package.json.template changes.
+npm ci
+if [ $? -ne 0 ]
+then
+  echo "ERROR: npm ci failed. If templates/package.json.template was changed, the"
+  echo "lockfile must be regenerated in the same commit (see README); aborting."
+  exit 1
+fi
 npm run build
 if [ $? -ne 0 ]
 then
