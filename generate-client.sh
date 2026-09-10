@@ -79,7 +79,11 @@ fi
 echo "[SUCCESS]"
 
 echo "Installing dependencies and building new client package..."
-npm ci
+if ! npm ci
+then
+  echo "ERROR: npm ci failed; aborting"
+  exit 1
+fi
 npm run build
 if [ $? -ne 0 ]
 then

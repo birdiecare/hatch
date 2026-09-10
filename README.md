@@ -68,13 +68,13 @@ The version of openapi-generator used is fixed in the [`generate-client.sh`](gen
 ### Building and publishing the package
 Once a client is generated using openapi-generator, Hatch compares the created client (and any included public models) against the latest published version of the client from your package registry. If the client has changed (because your spec has changed), or if there is no previous version, it will continue to publish the newly generated client to your GitHub package registry.
 
-Hatch first compiles the Typescript code so that the package can be published, using [this](templates/tsconfig.json) tsconfig, before creating an NPM package. The generated package will contain a `package.json` with basic information and the required dependencies. The template used for this can be found [here](templates/package.json.template). Build dependencies are pinned by [`templates/package-lock.json`](templates/package-lock.json) and installed with `npm ci`.
+Hatch first compiles the TypeScript code so that the package can be published, using [this](templates/tsconfig.json) tsconfig, before creating an NPM package. The generated package will contain a `package.json` with basic information and the required dependencies. The template used for this can be found [here](templates/package.json.template). Build dependencies are pinned by [`templates/package-lock.json`](templates/package-lock.json) and installed with `npm ci`.
 
 The version of each published package is automatically generated based on the date of publication, following the format: `0.0.YYYYMMDDHHMMSS`. 
 
 #### Regenerating the lockfile
 
-After changing [`templates/package.json.template`](templates/package.json.template), regenerate the lockfile in the same commit, or `npm ci` will fail on the mismatch. The template has no `name`/`version`, so set placeholders first — `generate-client.sh` overwrites them per-service at runtime, and `npm ci` only checks the dependency tree.
+After changing [`templates/package.json.template`](templates/package.json.template), regenerate the lockfile in the same commit, or `npm ci` will fail on the mismatch. The template's `name` is an empty placeholder, so give it a real one before generating — `generate-client.sh` overwrites `name`/`version` per-service at runtime, and `npm ci` only checks the dependency tree.
 
 ```sh
 HATCH=$(pwd)
