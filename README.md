@@ -72,6 +72,19 @@ Hatch first compiles the Typescript code so that the package can be published, u
 
 The version of each published package is automatically generated based on the date of publication, following the format: `0.0.YYYYMMDDHHMMSS`. 
 
+#### Regenerating the lockfile
+
+After changing [`templates/package.json.template`](templates/package.json.template), regenerate the lockfile in the same commit, or `npm ci` will fail on the mismatch. The template has no `name`/`version`, so set placeholders first — `generate-client.sh` overwrites them per-service at runtime, and `npm ci` only checks the dependency tree.
+
+```sh
+HATCH=$(pwd)
+cd "$(mktemp -d)"
+cp "$HATCH/templates/package.json.template" package.json
+npm pkg set name=hatch-client-template version=0.0.1
+npm install --package-lock-only
+cp package-lock.json "$HATCH/templates/package-lock.json"
+```
+
 ## Troubleshooting
 
 While using Hatch at Birdie, it has been stable and failures have been relatively rare. Where we have seen failures, they have generally been caused by one of the following reasons:
