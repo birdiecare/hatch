@@ -79,9 +79,8 @@ fi
 echo "[SUCCESS]"
 
 echo "Installing dependencies and building new client package..."
-# npm ci, not npm i: install exactly the tree in templates/package-lock.json.
 # The generated package.json only rewrites name/version/description/repository,
-# so it stays in sync with the lockfile's dependency set.
+# so it stays in sync with templates/package-lock.json.
 npm ci
 npm run build
 if [ $? -ne 0 ]
