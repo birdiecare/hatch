@@ -63,14 +63,27 @@ import { MyDTO } from '@mycompany/my-service-client/models/my-models.public-mode
 ### openapi-generator
 Hatch uses openapi-generator to generate a client from your OpenAPI v3 spec. openapi-generator has many "generators" to allow users to generate different types of clients; the one used by Hatch is the [typescript-axios generator](https://openapi-generator.tech/docs/generators/typescript-axios). Hatch currently does not allow changing the type of generator used; if you wish to use Hatch for a different target you will have to fork this repo and amend it (or open a PR to allow configuring the generator used 🤩).
 
-The version of openapi-generator used is fixed in the `generate-client.sh` script (currently using v4.3.0.).
+The version of openapi-generator used is fixed in the [`generate-client.sh`](generate-client.sh) script (currently v7.4.0).
 
 ### Building and publishing the package
 Once a client is generated using openapi-generator, Hatch compares the created client (and any included public models) against the latest published version of the client from your package registry. If the client has changed (because your spec has changed), or if there is no previous version, it will continue to publish the newly generated client to your GitHub package registry.
 
-Hatch first compiles the Typescript code so that the package can be published, using [this](templates/tsconfig.json) tsconfig, before creating an NPM package. The generated package will contain a `package.json` with basic information and the required dependencies. The template used for this can be found [here](templates/package.json.template). 
+Hatch first compiles the TypeScript code so that the package can be published, using [this](templates/tsconfig.json) tsconfig, before creating an NPM package. The generated package will contain a `package.json` with basic information and the required dependencies. The template used for this can be found [here](templates/package.json.template). Build dependencies are pinned by [`templates/package-lock.json`](templates/package-lock.json) and installed with `npm ci`.
 
 The version of each published package is automatically generated based on the date of publication, following the format: `0.0.YYYYMMDDHHMMSS`. 
+
+#### Regenerating the lockfile
+
+After changing [`templates/package.json.template`](templates/package.json.template), regenerate the lockfile in the same commit, or `npm ci` will fail on the mismatch. The template's `name` is an empty placeholder, so give it a real one before generating — `generate-client.sh` overwrites `name`/`version` per-service at runtime, and `npm ci` only checks the dependency tree.
+
+```sh
+HATCH=$(pwd)
+cd "$(mktemp -d)"
+cp "$HATCH/templates/package.json.template" package.json
+npm pkg set name=hatch-client-template version=0.0.1
+npm install --package-lock-only
+cp package-lock.json "$HATCH/templates/package-lock.json"
+```
 
 ## Troubleshooting
 
