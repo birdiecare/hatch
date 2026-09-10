@@ -79,8 +79,6 @@ fi
 echo "[SUCCESS]"
 
 echo "Installing dependencies and building new client package..."
-# The generated package.json only rewrites name/version/description/repository,
-# so it stays in sync with templates/package-lock.json.
 npm ci
 npm run build
 if [ $? -ne 0 ]
